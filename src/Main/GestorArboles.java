@@ -2,6 +2,7 @@ package Main;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -42,9 +43,31 @@ public class GestorArboles {
 				
 				//Variables
 					ArrayList<Arbol> arboles = new ArrayList<>();
-				
+					int select =0;
+					
 				//Menu
-					menu();
+					do {
+					 menu();
+					 select=Integer.parseInt(scan.nextLine());
+					 
+					 switch (select) {
+					 
+						 case CREATE:
+							 
+							break;
+						 case READ:
+							 break;
+						 case UPDATE:
+							 break;
+						 case DELETE:
+							 break;
+						 case SALIR:
+							 break;
+						 default:
+							 break;
+					 }
+					}while(select!=0);
+					
 					
 			} catch (ClassNotFoundException e) {
 				System.out.println("Error de importacion de la libreria");
@@ -89,5 +112,49 @@ public class GestorArboles {
 		System.out.println(UPDATE+"-Update");
 		System.out.println(DELETE+"-Delete");
 		System.out.println(SALIR+"-Salir");
+	}
+	
+	private static void insert(Statement st,Connection conexion) {
+		//Variables
+			String comun;
+			String cientifico;
+			String habitat;
+			int altura;
+			String origen;
+			
+			String sql="INSERT INTO arboles (nombre_comun,nombre_cientifico,habitat,altura,origen) VALUES ( ?, ?, ?, ?, ?)";
+			
+		try {
+			PreparedStatement pst = conexion.prepareStatement(sql);
+			
+			//Pedir datos
+				System.out.println("Inserte el nombre comun");
+				comun=scan.nextLine();
+				
+				System.out.println("Inserte el nombre cientifico");
+				cientifico=scan.nextLine();
+				
+				System.out.println("Inserte el habitat natural");
+				habitat=scan.nextLine();
+				
+				System.out.println("Inserte la altura");
+				altura=Integer.parseInt(scan.nextLine());
+				
+				System.out.println("Inserte el origen");
+				origen=scan.nextLine();
+				
+			//Ejecutar Query
+				pst.setString(1, comun);
+				pst.setString(2, cientifico);
+				pst.setString(3,habitat );
+				pst.setInt(4, altura);
+				pst.setString(5, origen);
+			
+				pst.execute();
+				
+		} catch (SQLException e) {
+			System.out.println("Error en la Query");
+			e.printStackTrace();
+		}
 	}
 }
