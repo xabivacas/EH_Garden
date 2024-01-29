@@ -57,6 +57,7 @@ public class GestorArboles {
 							break;
 							
 						 case READ:
+							 
 							 break;
 						 case UPDATE:
 							 break;
@@ -158,5 +159,36 @@ public class GestorArboles {
 			System.out.println("Error en la Query");
 			e.printStackTrace();
 		}
+	}
+	
+	private static void visualizar() {
+		//Variables
+			//preguntar uno o todos
+			//switch
+				//case uno
+					//ejecutar funcion ver uno
+					
+				//case todos
+					//rellenar array
+					//foreach
+						//pintar en pantalla	
+	}
+	private static void visualizarUno() {
+		//Variables
+			//pedir id
+			/*
+			 * buscar id
+			 * set en arbol
+			 * pintar en pantalla
+			 */
+	}
+	
+	private static void visualizarTodo() {
+		//variablees
+			/*
+			 * rellenar array
+			 * foreach
+			 * pintar en pantalla
+			 */
 	}
 }
