@@ -1,4 +1,4 @@
-package Objetos;
+package Main;
 
 public class Arbol {
 	
