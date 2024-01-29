@@ -180,12 +180,29 @@ public class GestorArboles {
 	}
 	private static void visualizarUno() {
 		//Variables
-			//pedir id
-			/*
-			 * buscar id
-			 * set en arbol
-			 * pintar en pantalla
-			 */
+			
+			try {
+				//Variables
+					Connection conexion = DriverManager.getConnection("jdbc:mysql://"+HOST+"/"+BBDD,USER,PASSWORD);
+					String sql= "SELECT * FROM arboles WHERE id= ?";
+					PreparedStatement pst = conexion.prepareStatement(sql);
+					int id = 0;
+					//pedir id
+					System.out.println("Inserte el id");
+					id=Integer.parseInt(scan.nextLine());
+				/*
+				 * buscar id
+				 * set en arbol
+				 * pintar en pantalla
+				 */
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+			
 	}
 	
 	private static void visualizarTodo() {
