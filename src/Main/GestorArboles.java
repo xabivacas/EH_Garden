@@ -163,15 +163,20 @@ public class GestorArboles {
 	
 	private static void visualizar() {
 		//Variables
-			//preguntar uno o todos
-			//switch
-				//case uno
-					//ejecutar funcion ver uno
-					
-				//case todos
-					//rellenar array
-					//foreach
-						//pintar en pantalla	
+			int select=0;
+			
+		//Preguntar uno o todos
+			System.out.println("1-Visualizar uno arbol");
+			System.out.println("2-Visualizar todos");
+			select=Integer.parseInt(scan.nextLine());
+			
+		if(select==1) {
+			visualizarUno();
+		}else if(select==2) {
+			visualizarTodo();
+		}else {
+			System.out.println("Opcion no valida");
+		}
 	}
 	private static void visualizarUno() {
 		//Variables
