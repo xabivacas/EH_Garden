@@ -53,8 +53,9 @@ public class GestorArboles {
 					 switch (select) {
 					 
 						 case CREATE:
-							 
+							insert(st,conexion);
 							break;
+							
 						 case READ:
 							 break;
 						 case UPDATE:
@@ -152,6 +153,7 @@ public class GestorArboles {
 			
 				pst.execute();
 				
+			System.out.println("Insert completado");
 		} catch (SQLException e) {
 			System.out.println("Error en la Query");
 			e.printStackTrace();
