@@ -65,6 +65,11 @@ public class GestorArboles {
 							 break;
 							 
 						 case DELETE:
+							 
+							 System.out.println("Inserte el id del arbol que quiere modificar");
+							 int id=Integer.parseInt(scan.nextLine());
+							 
+							 delete(id);
 							 break;
 						 case SALIR:
 							 break;
@@ -262,12 +267,7 @@ public class GestorArboles {
 			//Variables
 				String sqlRead= "SELECT * FROM arboles WHERE id=?";
 				String sqlUpdate="UPDATE arboles SET nombre_comun= ? ,nombre_cientifico= ? ,habitat= ? ,altura= ? , origen= ? WHERE id= ?";
-				
-				
-				
-				
-				
-				
+	
 				Connection conexion = DriverManager.getConnection("jdbc:mysql://"+HOST+"/"+BBDD,USER,PASSWORD);
 				PreparedStatement pst = conexion.prepareStatement(sqlRead);
 				
@@ -280,53 +280,75 @@ public class GestorArboles {
 			
 			//Si encuentra Id ejecutar
 				if(rs.next()) {
-					Arbol a = new Arbol();
-					
-					a.setId(rs.getInt("id"));
-					a.setNombreComun(rs.getString("nombre_comun"));
-					a.setNombreCientifico(rs.getString("nombre_cientifico"));
-					a.setHabitat(rs.getString("habitat"));
-					a.setAltura(rs.getInt("altura"));
-					a.setOrigen(rs.getString("origen"));
-					
-					System.out.println("\n"+a);
+					//Cargar datos del arbol y pintar
+						Arbol a = new Arbol();
+						
+						a.setId(rs.getInt("id"));
+						a.setNombreComun(rs.getString("nombre_comun"));
+						a.setNombreCientifico(rs.getString("nombre_cientifico"));
+						a.setHabitat(rs.getString("habitat"));
+						a.setAltura(rs.getInt("altura"));
+						a.setOrigen(rs.getString("origen"));
+						
+						System.out.println("\n"+a);
 					System.out.println("-----------------------------------------");
 					
-					pst = conexion.prepareStatement(sqlUpdate);
+					//Pedir datos para modificar
+						pst = conexion.prepareStatement(sqlUpdate);
+						
+						System.out.println("Inserte el nuevo nombre comun");
+						String nombreComun=scan.nextLine();
+						
+						System.out.println("Inserte el nuevo nombre cientifio");
+						String nombreCientifico=scan.nextLine();
+						
+						System.out.println("Inserte el nuevo habitat");
+						String habitat=scan.nextLine();
+						
+						System.out.println("Inserte la nueva altura");
+						int altura = Integer.parseInt(scan.nextLine());
+						
+						System.out.println("Inserte el nuevo origen");
+						String origen=scan.nextLine();
 					
-					System.out.println("Inserte el nuevo nombre comun");
-					String nombreComun=scan.nextLine();
-					
-					System.out.println("Inserte el nuevo nombre cientifio");
-					String nombreCientifico=scan.nextLine();
-					
-					System.out.println("Inserte el nuevo habitat");
-					String habitat=scan.nextLine();
-					
-					System.out.println("Inserte la nueva altura");
-					int altura = Integer.parseInt(scan.nextLine());
-					
-					System.out.println("Inserte el nuevo origen");
-					String origen=scan.nextLine();
-					
-					pst.setString(1, nombreComun);
-					pst.setString(2, nombreCientifico);
-					pst.setString(3, habitat);
-					pst.setInt(4, altura);
-					pst.setString(5, origen);
-					pst.setInt(6, id);
-					
-					pst.execute();
+					//Modificar
+						pst.setString(1, nombreComun);
+						pst.setString(2, nombreCientifico);
+						pst.setString(3, habitat);
+						pst.setInt(4, altura);
+						pst.setString(5, origen);
+						pst.setInt(6, id);
+						
+						pst.execute();
+						
 					System.out.println("Modificacion realizada");
-					
+						
 				}else {
 					System.out.println("Id no encontrado");
 				}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			System.out.println("Error");
 			e.printStackTrace();
 		}
 		
 	}
+	
+	private static void delete(int id) {
+		try {
+			//Variables
+				String sql = "DELETE FROM arboles WHERE id = ?";
+				
+				Connection conexion = DriverManager.getConnection("jdbc:mysql://"+HOST+"/"+BBDD,USER,PASSWORD);
+				PreparedStatement pst = conexion.prepareStatement(sql);
+			
+				pst.setInt(1, id);
+				pst.execute();
+			
+		} catch (SQLException e) {
+			System.out.println("Error");
+			e.printStackTrace();
+		}
+	}
+	
 	
 }
