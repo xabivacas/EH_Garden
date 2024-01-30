@@ -42,6 +42,8 @@ public class GestorArboles {
 				
 				
 				//Variables
+					Arbol a;
+					int id=0;
 					int select =0;
 					
 				//Menu
@@ -52,7 +54,23 @@ public class GestorArboles {
 					 switch (select) {
 					 
 						 case CREATE:
-							insert(st,conexion);
+						 	a = new Arbol();
+						 	System.out.println("Inserte el nombre comun");
+							a.setNombreComun(scan.nextLine());
+							
+							System.out.println("Inserte el nombre cientifico");
+							a.setNombreCientifico(scan.nextLine());
+							
+							System.out.println("Inserte el habitat natural");
+							a.setHabitat(scan.nextLine());
+							
+							System.out.println("Inserte la altura");
+							a.setAltura(Integer.parseInt(scan.nextLine()));
+							
+							System.out.println("Inserte el origen");
+							a.setOrigen(scan.nextLine());
+							
+							insert(a);
 							break;
 							
 						 case READ:
@@ -60,13 +78,38 @@ public class GestorArboles {
 							 break;
 							 
 						 case UPDATE:
-							 modificar();
+							 a=new Arbol();
+							 
+							 System.out.println("Inserte el id del arbol que quiere modificar");
+							 id=Integer.parseInt(scan.nextLine());
+							 a = arbol(id);
+							 System.out.println(a);
+							 System.out.println("---------------------");
+							 
+							 System.out.println("Inserte el nuevo nombre comun");
+							 a.setNombreComun(scan.nextLine());
+							
+							 System.out.println("Inserte el nuevo nombre cientifico");
+							 a.setNombreCientifico(scan.nextLine());
+							
+							 System.out.println("Inserte el nuevo habitat natural");
+							 a.setHabitat(scan.nextLine());
+							
+							 System.out.println("Inserte la nueva altura");
+							 a.setAltura(Integer.parseInt(scan.nextLine()));
+							
+							 System.out.println("Inserte el nuevoorigen");
+							 a.setOrigen(scan.nextLine());
+							 
+							 update(a);
+							 System.out.println("Modificacion realizada");
 							 break;
 							 
 						 case DELETE:
 							 
-							 System.out.println("Inserte el id del arbol que quiere modificar");
-							 int id=Integer.parseInt(scan.nextLine());
+							 System.out.println("Inserte el id del arbol que quiere borrar");
+							 id=Integer.parseInt(scan.nextLine());
+							 
 							 
 							 delete(id);
 							 break;
@@ -134,41 +177,21 @@ public class GestorArboles {
 		System.out.println(SALIR+"-Salir");
 	}
 	
-	private static void insert(Statement st,Connection conexion) {
-		//Variables
-			String comun;
-			String cientifico;
-			String habitat;
-			int altura;
-			String origen;
-			
-			String sql="INSERT INTO arboles (nombre_comun,nombre_cientifico,habitat,altura,origen) VALUES ( ?, ?, ?, ?, ?)";
+	private static void insert(Arbol a) {
 			
 		try {
-			PreparedStatement pst = conexion.prepareStatement(sql);
-			
-			//Pedir datos
-				System.out.println("Inserte el nombre comun");
-				comun=scan.nextLine();
+			//Variables
+				String sql="INSERT INTO arboles (nombre_comun,nombre_cientifico,habitat,altura,origen) VALUES ( ?, ?, ?, ?, ?)";
 				
-				System.out.println("Inserte el nombre cientifico");
-				cientifico=scan.nextLine();
-				
-				System.out.println("Inserte el habitat natural");
-				habitat=scan.nextLine();
-				
-				System.out.println("Inserte la altura");
-				altura=Integer.parseInt(scan.nextLine());
-				
-				System.out.println("Inserte el origen");
-				origen=scan.nextLine();
-				
+				Connection conexion = DriverManager.getConnection("jdbc:mysql://"+HOST+"/"+BBDD,USER,PASSWORD);
+				PreparedStatement pst = conexion.prepareStatement(sql);
+
 			//Ejecutar Query
-				pst.setString(1, comun);
-				pst.setString(2, cientifico);
-				pst.setString(3,habitat );
-				pst.setInt(4, altura);
-				pst.setString(5, origen);
+				pst.setString(1, a.getNombreComun());
+				pst.setString(2, a.getNombreCientifico());
+				pst.setString(3,a.getHabitat() );
+				pst.setInt(4, a.getAltura());
+				pst.setString(5, a.getOrigen());
 			
 				pst.execute();
 				
@@ -241,108 +264,27 @@ public class GestorArboles {
 
 			return a;
 	}
+
 	
-	private static void visualizarTodo() {
-			 
-			try {
-				//variablees
-					ArrayList<Arbol> arboles = new ArrayList<>();
-					String sql= "SELECT * FROM arboles";
-					
-					Connection conexion = DriverManager.getConnection("jdbc:mysql://"+HOST+"/"+BBDD,USER,PASSWORD);
-					PreparedStatement pst = conexion.prepareStatement(sql);
-					ResultSet rs = pst.executeQuery();
-				
-				System.out.println("Cargando los arboles...\n");
-				
-				while(rs.next()) {
-					Arbol a = new Arbol();
-					
-					a.setId(rs.getInt("id"));
-					a.setNombreComun(rs.getString("nombre_comun"));
-					a.setNombreCientifico(rs.getString("nombre_cientifico"));
-					a.setHabitat(rs.getString("habitat"));
-					a.setAltura(rs.getInt("altura"));
-					a.setOrigen(rs.getString("origen"));
-					
-					arboles.add(a);
-				}
-				
-				for(Arbol a:arboles) {
-					System.out.println(a);
-				}
-				
-			} catch (SQLException e) {
-				System.out.println("Error al cargar los arboles");
-				e.printStackTrace();
-			}
-	}
-	
-	private static void modificar() {
+	private static void update(Arbol a) {
 		
 		try {
 			//Variables
-				String sqlRead= "SELECT * FROM arboles WHERE id=?";
 				String sqlUpdate="UPDATE arboles SET nombre_comun= ? ,nombre_cientifico= ? ,habitat= ? ,altura= ? , origen= ? WHERE id= ?";
 	
 				Connection conexion = DriverManager.getConnection("jdbc:mysql://"+HOST+"/"+BBDD,USER,PASSWORD);
-				PreparedStatement pst = conexion.prepareStatement(sqlRead);
-				
-			//Pedir id para buscar
-				System.out.println("Inserte el id del arbol que quiere modificar");
-				int id=Integer.parseInt(scan.nextLine());
-				
-				pst.setInt(1, id);
-				ResultSet rs= pst.executeQuery();
-			
-			//Si encuentra Id ejecutar
-				if(rs.next()) {
-					//Cargar datos del arbol y pintar
-						Arbol a = new Arbol();
-						
-						a.setId(rs.getInt("id"));
-						a.setNombreComun(rs.getString("nombre_comun"));
-						a.setNombreCientifico(rs.getString("nombre_cientifico"));
-						a.setHabitat(rs.getString("habitat"));
-						a.setAltura(rs.getInt("altura"));
-						a.setOrigen(rs.getString("origen"));
-						
-						System.out.println("\n"+a);
-					System.out.println("-----------------------------------------");
-					
-					//Pedir datos para modificar
-						pst = conexion.prepareStatement(sqlUpdate);
-						
-						System.out.println("Inserte el nuevo nombre comun");
-						String nombreComun=scan.nextLine();
-						
-						System.out.println("Inserte el nuevo nombre cientifio");
-						String nombreCientifico=scan.nextLine();
-						
-						System.out.println("Inserte el nuevo habitat");
-						String habitat=scan.nextLine();
-						
-						System.out.println("Inserte la nueva altura");
-						int altura = Integer.parseInt(scan.nextLine());
-						
-						System.out.println("Inserte el nuevo origen");
-						String origen=scan.nextLine();
-					
+				PreparedStatement pst = conexion.prepareStatement(sqlUpdate);
+	
 					//Modificar
-						pst.setString(1, nombreComun);
-						pst.setString(2, nombreCientifico);
-						pst.setString(3, habitat);
-						pst.setInt(4, altura);
-						pst.setString(5, origen);
-						pst.setInt(6, id);
+						pst.setString(1, a.getNombreComun());
+						pst.setString(2, a.getNombreCientifico());
+						pst.setString(3, a.getHabitat());
+						pst.setInt(4, a.getAltura());
+						pst.setString(5, a.getOrigen());
+						pst.setInt(6, a.getId());
 						
 						pst.execute();
 						
-					System.out.println("Modificacion realizada");
-						
-				}else {
-					System.out.println("Id no encontrado");
-				}
 		} catch (SQLException e) {
 			System.out.println("Error");
 			e.printStackTrace();
