@@ -57,7 +57,7 @@ public class GestorArboles {
 							break;
 							
 						 case READ:
-							 
+							 visualizar();
 							 break;
 						 case UPDATE:
 							 break;
@@ -108,7 +108,7 @@ public class GestorArboles {
 	}
 	
 	private static void menu() {
-		System.out.println("--Menu--");
+		System.out.println("\n--Menu--");
 		System.out.println(CREATE+"-Create");
 		System.out.println(READ+"-Read");
 		System.out.println(UPDATE+"-Update");
@@ -179,25 +179,36 @@ public class GestorArboles {
 		}
 	}
 	private static void visualizarUno() {
-		//Variables
-			
+		
 			try {
 				//Variables
 					Connection conexion = DriverManager.getConnection("jdbc:mysql://"+HOST+"/"+BBDD,USER,PASSWORD);
+					
 					String sql= "SELECT * FROM arboles WHERE id= ?";
+					
 					PreparedStatement pst = conexion.prepareStatement(sql);
-					int id = 0;
-					//pedir id
+					
+				//pedir id
 					System.out.println("Inserte el id");
-					id=Integer.parseInt(scan.nextLine());
-				/*
-				 * buscar id
-				 * set en arbol
-				 * pintar en pantalla
-				 */
+					int id=Integer.parseInt(scan.nextLine());
+					
+					pst.setInt(1, id);
+					ResultSet rs = pst.executeQuery();
+					rs.next();
+			
+				//buscar id y devolver resultado
+					Arbol a = new Arbol();
+					a.setId(rs.getInt("id"));
+					a.setNombreComun(rs.getString("nombre_comun"));
+					a.setNombreCientifico(rs.getString("nombre_cientifico"));
+					a.setHabitat(rs.getString("habitat"));
+					a.setAltura(rs.getInt("altura"));
+					a.setOrigen(rs.getString("origen"));
 				
+				//pintar arbol
+					System.out.println(a);
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
+				System.out.println("Id no encontrado");
 				e.printStackTrace();
 			}
 			
@@ -206,11 +217,39 @@ public class GestorArboles {
 	}
 	
 	private static void visualizarTodo() {
-		//variablees
-			/*
-			 * rellenar array
-			 * foreach
-			 * pintar en pantalla
-			 */
+			 
+			try {
+				//variablees
+					ArrayList<Arbol> arboles = new ArrayList<>();
+					String sql= "SELECT * FROM arboles";
+					
+					Connection conexion = DriverManager.getConnection("jdbc:mysql://"+HOST+"/"+BBDD,USER,PASSWORD);
+					PreparedStatement pst = conexion.prepareStatement(sql);
+					ResultSet rs = pst.executeQuery();
+				
+				System.out.println("Cargando los arboles...\n");
+				
+				while(rs.next()) {
+					Arbol a = new Arbol();
+					
+					a.setId(rs.getInt("id"));
+					a.setNombreComun(rs.getString("nombre_comun"));
+					a.setNombreCientifico(rs.getString("nombre_cientifico"));
+					a.setHabitat(rs.getString("habitat"));
+					a.setAltura(rs.getInt("altura"));
+					a.setOrigen(rs.getString("origen"));
+					
+					arboles.add(a);
+				}
+				
+				for(Arbol a:arboles) {
+					System.out.println(a);
+				}
+				
+			} catch (SQLException e) {
+				System.out.println("Error al cargar los arboles");
+				e.printStackTrace();
+			}
 	}
+			
 }
