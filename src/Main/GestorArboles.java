@@ -98,7 +98,7 @@ public class GestorArboles {
 							 System.out.println("Inserte la nueva altura");
 							 a.setAltura(Integer.parseInt(scan.nextLine()));
 							
-							 System.out.println("Inserte el nuevoorigen");
+							 System.out.println("Inserte el nuevo origen");
 							 a.setOrigen(scan.nextLine());
 							 
 							 update(a);
@@ -265,7 +265,6 @@ public class GestorArboles {
 			return a;
 	}
 
-	
 	private static void update(Arbol a) {
 		
 		try {
@@ -289,7 +288,6 @@ public class GestorArboles {
 			System.out.println("Error");
 			e.printStackTrace();
 		}
-		
 	}
 	
 	private static void delete(int id) {
@@ -308,6 +306,4 @@ public class GestorArboles {
 			e.printStackTrace();
 		}
 	}
-	
-	
 }
