@@ -100,9 +100,8 @@ public class GestorArboles {
 			
 		try {
 			//Variables
-			Connection conexion = DriverManager.getConnection("jdbc:mysql://"+HOST+"/"+BBDD,USER,PASSWORD);
-			PreparedStatement pst = conexion.prepareStatement(sql);
-			st.executeQuery();
+				Connection conexion = DriverManager.getConnection("jdbc:mysql://"+HOST+"/"+BBDD,USER,PASSWORD);
+				Statement st = conexion.createStatement();
 				ResultSet rs = st.executeQuery("SELECT * FROM arboles");
 			
 			//Recorrer y guardar en el arrayList
@@ -117,6 +116,7 @@ public class GestorArboles {
 					
 					arboles.add(a);
 				}	
+				
 		} catch (SQLException e) {
 			System.out.println("Error al cargar la tabla");
 			e.printStackTrace();
@@ -200,6 +200,10 @@ public class GestorArboles {
 				
 		}else if(select==2) {
 			arboles=arboles();
+			
+			for(Arbol a:arboles) {
+				System.out.println(a);
+			}
 			
 		}else {
 			System.out.println("Opcion no valida");
