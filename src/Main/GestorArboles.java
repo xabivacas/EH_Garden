@@ -59,8 +59,11 @@ public class GestorArboles {
 						 case READ:
 							 visualizar();
 							 break;
+							 
 						 case UPDATE:
+							 modificar();
 							 break;
+							 
 						 case DELETE:
 							 break;
 						 case SALIR:
@@ -178,6 +181,7 @@ public class GestorArboles {
 			System.out.println("Opcion no valida");
 		}
 	}
+	
 	private static void visualizarUno() {
 		
 			try {
@@ -251,5 +255,78 @@ public class GestorArboles {
 				e.printStackTrace();
 			}
 	}
+	
+	private static void modificar() {
+		
+		try {
+			//Variables
+				String sqlRead= "SELECT * FROM arboles WHERE id=?";
+				String sqlUpdate="UPDATE arboles SET nombre_comun= ? ,nombre_cientifico= ? ,habitat= ? ,altura= ? , origen= ? WHERE id= ?";
+				
+				
+				
+				
+				
+				
+				Connection conexion = DriverManager.getConnection("jdbc:mysql://"+HOST+"/"+BBDD,USER,PASSWORD);
+				PreparedStatement pst = conexion.prepareStatement(sqlRead);
+				
+			//Pedir id para buscar
+				System.out.println("Inserte el id del arbol que quiere modificar");
+				int id=Integer.parseInt(scan.nextLine());
+				
+				pst.setInt(1, id);
+				ResultSet rs= pst.executeQuery();
 			
+			//Si encuentra Id ejecutar
+				if(rs.next()) {
+					Arbol a = new Arbol();
+					
+					a.setId(rs.getInt("id"));
+					a.setNombreComun(rs.getString("nombre_comun"));
+					a.setNombreCientifico(rs.getString("nombre_cientifico"));
+					a.setHabitat(rs.getString("habitat"));
+					a.setAltura(rs.getInt("altura"));
+					a.setOrigen(rs.getString("origen"));
+					
+					System.out.println("\n"+a);
+					System.out.println("-----------------------------------------");
+					
+					pst = conexion.prepareStatement(sqlUpdate);
+					
+					System.out.println("Inserte el nuevo nombre comun");
+					String nombreComun=scan.nextLine();
+					
+					System.out.println("Inserte el nuevo nombre cientifio");
+					String nombreCientifico=scan.nextLine();
+					
+					System.out.println("Inserte el nuevo habitat");
+					String habitat=scan.nextLine();
+					
+					System.out.println("Inserte la nueva altura");
+					int altura = Integer.parseInt(scan.nextLine());
+					
+					System.out.println("Inserte el nuevo origen");
+					String origen=scan.nextLine();
+					
+					pst.setString(1, nombreComun);
+					pst.setString(2, nombreCientifico);
+					pst.setString(3, habitat);
+					pst.setInt(4, altura);
+					pst.setString(5, origen);
+					pst.setInt(6, id);
+					
+					pst.execute();
+					System.out.println("Modificacion realizada");
+					
+				}else {
+					System.out.println("Id no encontrado");
+				}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
 }
