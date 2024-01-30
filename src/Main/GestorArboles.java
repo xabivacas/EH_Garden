@@ -42,7 +42,6 @@ public class GestorArboles {
 				
 				
 				//Variables
-					ArrayList<Arbol> arboles = new ArrayList<>();
 					int select =0;
 					
 				//Menu
@@ -71,9 +70,13 @@ public class GestorArboles {
 							 
 							 delete(id);
 							 break;
+							 
 						 case SALIR:
+							 System.out.println("Agur");
 							 break;
+							 
 						 default:
+							 System.out.println("Opcion no valida");
 							 break;
 					 }
 					}while(select!=0);
@@ -91,10 +94,15 @@ public class GestorArboles {
 			
 	}
 	
-	private static void arboles(Statement st,	ArrayList<Arbol> arboles){
-		
+	private static  ArrayList<Arbol> arboles(){
+		//Variable ArrayList
+			ArrayList<Arbol> arboles = new ArrayList<>();
+			
 		try {
-			//Ejecutar Query
+			//Variables
+			Connection conexion = DriverManager.getConnection("jdbc:mysql://"+HOST+"/"+BBDD,USER,PASSWORD);
+			PreparedStatement pst = conexion.prepareStatement(sql);
+			st.executeQuery();
 				ResultSet rs = st.executeQuery("SELECT * FROM arboles");
 			
 			//Recorrer y guardar en el arrayList
@@ -112,7 +120,9 @@ public class GestorArboles {
 		} catch (SQLException e) {
 			System.out.println("Error al cargar la tabla");
 			e.printStackTrace();
-		}		
+		}
+		
+		return arboles;
 	}
 	
 	private static void menu() {
@@ -171,6 +181,7 @@ public class GestorArboles {
 	
 	private static void visualizar() {
 		//Variables
+			ArrayList<Arbol> arboles = new ArrayList<>();
 			int select=0;
 			
 		//Preguntar uno o todos
@@ -179,15 +190,25 @@ public class GestorArboles {
 			select=Integer.parseInt(scan.nextLine());
 			
 		if(select==1) {
-			visualizarUno();
+			//pedir id
+				System.out.println("Inserte el id");
+				int id=Integer.parseInt(scan.nextLine());
+				Arbol a =arbol(id);
+				
+			//Pintar arbol
+				System.out.println(a);
+				
 		}else if(select==2) {
-			visualizarTodo();
+			arboles=arboles();
+			
 		}else {
 			System.out.println("Opcion no valida");
 		}
 	}
 	
-	private static void visualizarUno() {
+	private static Arbol arbol(int id) {
+		//Variable
+			Arbol a = new Arbol();
 		
 			try {
 				//Variables
@@ -196,33 +217,25 @@ public class GestorArboles {
 					String sql= "SELECT * FROM arboles WHERE id= ?";
 					
 					PreparedStatement pst = conexion.prepareStatement(sql);
-					
-				//pedir id
-					System.out.println("Inserte el id");
-					int id=Integer.parseInt(scan.nextLine());
-					
+				//buscar id
 					pst.setInt(1, id);
 					ResultSet rs = pst.executeQuery();
 					rs.next();
-			
-				//buscar id y devolver resultado
-					Arbol a = new Arbol();
+					
+				//Darle atributos al arbol
 					a.setId(rs.getInt("id"));
 					a.setNombreComun(rs.getString("nombre_comun"));
 					a.setNombreCientifico(rs.getString("nombre_cientifico"));
 					a.setHabitat(rs.getString("habitat"));
 					a.setAltura(rs.getInt("altura"));
 					a.setOrigen(rs.getString("origen"));
-				
-				//pintar arbol
-					System.out.println(a);
+						
 			} catch (SQLException e) {
 				System.out.println("Id no encontrado");
 				e.printStackTrace();
 			}
-			
-			
-			
+
+			return a;
 	}
 	
 	private static void visualizarTodo() {
