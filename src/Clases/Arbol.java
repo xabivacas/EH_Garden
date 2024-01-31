@@ -1,5 +1,6 @@
 package Clases;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Arbol {
@@ -12,6 +13,7 @@ public class Arbol {
 		private String origen;
 		private Date encontrado;
 		private boolean singular;
+		private SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd");
 		
 		private Habitat habitat;		
 	
@@ -64,12 +66,14 @@ public class Arbol {
 		public Habitat getHabitat() {
 			return habitat;
 		}
-		
 		@Override
 		public String toString() {
-			return id + "-Nombre Comun=" + nombreComun + ", Nombre Cientifico=" + nombreCientifico
-					+ ", Habitat=" + habitat + ", Altura=" + altura + ", Origen=" + origen;
+			return id + ", Nombre comun=" + nombreComun + ", Nombre cientifico=" + nombreCientifico
+					+ ", Altura=" + altura + ", Origen=" + origen + ", Encontrado=" + sdf.format(encontrado) + ", singular="
+					+ singular + ", habitat=" + habitat.getNombre();
 		}
+		
+		
 		
 	
 	

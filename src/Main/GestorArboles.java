@@ -14,7 +14,7 @@ import Clases.*;
 public class GestorArboles {
 
 	private static final String HOST="localhost";
-	private static final String BBDD="eh_garden";
+	private static final String BBDD="eh_garden2";
 	private static final String USER="root";
 	private static final String PASSWORD="";
 	private static final Scanner scan = new Scanner (System.in);
@@ -147,7 +147,7 @@ public class GestorArboles {
 			//Variables
 				Connection conexion = DriverManager.getConnection("jdbc:mysql://"+HOST+"/"+BBDD,USER,PASSWORD);
 				Statement st = conexion.createStatement();
-				ResultSet rs = st.executeQuery("SELECT * FROM arboles a INNER JOIN habitat h ON a.habitat_id=h.id");
+				ResultSet rs = st.executeQuery("SELECT * FROM arboles INNER JOIN habitat  ON arboles.habitat_id=habitat.id");
 			
 			//Recorrer y guardar en el arrayList
 				while(rs.next()){
@@ -165,7 +165,7 @@ public class GestorArboles {
 					a.setAltura(rs.getInt("altura"));
 					a.setOrigen(rs.getString("origen"));
 					a.setEncontrado(rs.getDate("encontrado"));
-					a.setSingular(rs.getBoolean("encontrado"));
+					a.setSingular(rs.getBoolean("singular"));
 					
 					arboles.add(a);
 				}	
@@ -245,13 +245,13 @@ public class GestorArboles {
 	
 	private static Arbol arbol(int id) {
 		//Variable
-			Arbol a = new Arbol();
-		
+		Arbol a = new Arbol();
+		Habitat h = new Habitat();
 			try {
 				//Variables
 					Connection conexion = DriverManager.getConnection("jdbc:mysql://"+HOST+"/"+BBDD,USER,PASSWORD);
 					
-					String sql= "SELECT * FROM arboles WHERE id= ?";
+					String sql= "SELECT * FROM arboles a INNER JOIN habitat h ON a.habitat_id = h.id WHERE a.id= ?";
 					
 					PreparedStatement pst = conexion.prepareStatement(sql);
 				//buscar id
@@ -260,12 +260,21 @@ public class GestorArboles {
 					rs.next();
 					
 				//Darle atributos al arbol
+					
+					
 					a.setId(rs.getInt("id"));
 					a.setNombreComun(rs.getString("nombre_comun"));
 					a.setNombreCientifico(rs.getString("nombre_cientifico"));
-					a.setHabitat(rs.getString("habitat"));
+					
+					h.setId(rs.getInt("habitat_id"));
+					h.setNombre(rs.getString("nombre"));
+					a.setHabitat(h);
+					
 					a.setAltura(rs.getInt("altura"));
 					a.setOrigen(rs.getString("origen"));
+					a.setEncontrado(rs.getDate("encontrado"));
+					a.setSingular(rs.getBoolean("singular"));
+					
 						
 			} catch (SQLException e) {
 				System.out.println("Id no encontrado");
