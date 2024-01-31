@@ -9,7 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import Clases.Arbol;
+import Clases.*;
 
 public class GestorArboles {
 
@@ -147,17 +147,25 @@ public class GestorArboles {
 			//Variables
 				Connection conexion = DriverManager.getConnection("jdbc:mysql://"+HOST+"/"+BBDD,USER,PASSWORD);
 				Statement st = conexion.createStatement();
-				ResultSet rs = st.executeQuery("SELECT * FROM arboles");
+				ResultSet rs = st.executeQuery("SELECT * FROM arboles a INNER JOIN habitat h ON a.habitat_id=h.id");
 			
 			//Recorrer y guardar en el arrayList
 				while(rs.next()){
 					Arbol a = new Arbol();
+					Habitat h = new Habitat();
+					
 					a.setId(rs.getInt("id"));
 					a.setNombreComun(rs.getString("nombre_comun"));
 					a.setNombreCientifico(rs.getString("nombre_cientifico"));
-					a.setHabitat(rs.getString("habitat"));
+					
+					h.setId(rs.getInt("habitat_id"));
+					h.setNombre(rs.getString("nombre"));
+					a.setHabitat(h);
+					
 					a.setAltura(rs.getInt("altura"));
 					a.setOrigen(rs.getString("origen"));
+					a.setEncontrado(rs.getDate("encontrado"));
+					a.setSingular(rs.getBoolean("encontrado"));
 					
 					arboles.add(a);
 				}	
