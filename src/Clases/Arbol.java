@@ -1,4 +1,6 @@
-package Main;
+package Clases;
+
+import java.util.Date;
 
 public class Arbol {
 	
@@ -6,9 +8,12 @@ public class Arbol {
 		private int id;
 		private String nombreComun;
 		private String nombreCientifico;
-		private String habitat;
 		private int altura;
 		private String origen;
+		private Date encontrado;
+		private boolean singular;
+		
+		private Habitat habitat;		
 	
 	//Getter&Setter
 		public int getId() {
@@ -29,12 +34,6 @@ public class Arbol {
 		public void setNombreCientifico(String nombreCientifico) {
 			this.nombreCientifico = nombreCientifico;
 		}
-		public String getHabitat() {
-			return habitat;
-		}
-		public void setHabitat(String habitat) {
-			this.habitat = habitat;
-		}
 		public int getAltura() {
 			return altura;
 		}
@@ -47,6 +46,25 @@ public class Arbol {
 		public void setOrigen(String origen) {
 			this.origen = origen;
 		}
+		public Date getEncontrado() {
+			return encontrado;
+		}
+		public void setEncontrado(Date encontrado) {
+			this.encontrado = encontrado;
+		}
+		public boolean isSingular() {
+			return singular;
+		}
+		public void setSingular(boolean singular) {
+			this.singular = singular;
+		}
+		public void setHabitat(Habitat habitat) {
+			this.habitat = habitat;
+		}
+		public Habitat getHabitat() {
+			return habitat;
+		}
+		
 		@Override
 		public String toString() {
 			return id + "-Nombre Comun=" + nombreComun + ", Nombre Cientifico=" + nombreCientifico
