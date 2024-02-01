@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -45,8 +47,10 @@ public class GestorArboles {
 				
 				//Variables
 					Arbol a;
+					Habitat h;
 					int id=0;
 					int select =0;
+					Date date = new Date(String);
 					
 				//Menu
 					do {
@@ -55,25 +59,34 @@ public class GestorArboles {
 					 
 					 switch (select) {
 					 
-//						 case CREATE:
-//						 	a = new Arbol();
-//						 	System.out.println("Inserte el nombre comun");
-//							a.setNombreComun(scan.nextLine());
-//							
-//							System.out.println("Inserte el nombre cientifico");
-//							a.setNombreCientifico(scan.nextLine());
-//							
-//							System.out.println("Inserte el habitat natural");
-//							a.setHabitat(scan.nextLine());
-//							
-//							System.out.println("Inserte la altura");
-//							a.setAltura(Integer.parseInt(scan.nextLine()));
-//							
-//							System.out.println("Inserte el origen");
-//							a.setOrigen(scan.nextLine());
-//							
-//							insert(a);
-//							break;
+						 case CREATE:
+						 	a = new Arbol();
+						 	System.out.println("Inserte el nombre comun");
+							a.setNombreComun(scan.nextLine());
+							
+							System.out.println("Inserte el nombre cientifico");
+							a.setNombreCientifico(scan.nextLine());
+							
+							System.out.println("Inserte la altura");
+							a.setAltura(Integer.parseInt(scan.nextLine()));
+							
+							System.out.println("Inserte el origen");
+							a.setOrigen(scan.nextLine());
+							
+//							System.out.println("Inserte cuando ha sido descubierto");
+//							a.setEncontrado((Date)scan.nextLine());
+							
+							System.out.println("Es singular?(S/N)");
+								if(scan.nextLine().equalsIgnoreCase("S")) {
+									a.setSingular(true);
+								}else {
+									a.setSingular(false);
+								}
+								
+							visuHabitat();
+							
+							insert(a);
+							break;
 							
 						 case READ:
 							 visualizar();
@@ -142,6 +155,7 @@ public class GestorArboles {
 	private static void menu() {
 		System.out.println("\n--Menu--");
 		System.out.println(CREATE+"-Create");
+		
 		System.out.println(READ+"-Read");
 		System.out.println(UPDATE+"-Update");
 		System.out.println(DELETE+"-Delete");
@@ -171,6 +185,33 @@ public class GestorArboles {
 			System.out.println("Error en la Query");
 			e.printStackTrace();
 		}
+	}
+	private static ArrayList<Habitat> visuHabitat() {
+		ArrayList<Habitat> habitats = new ArrayList<>();
+		try {
+			//Variables
+				Connection conexion = DriverManager.getConnection("jdbc:mysql://"+HOST+"/"+BBDD,USER,PASSWORD);
+				
+				String sql= "SELECT * FROM habitat";
+				
+				PreparedStatement pst = conexion.prepareStatement(sql);
+				ResultSet rs = pst.executeQuery();
+				
+				
+			//Darle atributos al habitat
+				while(rs.next()) {
+					Habitat h = new Habitat();
+					h.setId(rs.getInt("habitat_id"));
+					h.setNombre(rs.getString("nombre"));
+					habitats.add(h);
+				}
+					
+				return habitats;
+		} catch (SQLException e) {
+			System.out.println("Id no encontrado");
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	private static void visualizar() {
