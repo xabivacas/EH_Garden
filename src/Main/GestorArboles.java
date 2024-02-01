@@ -9,6 +9,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import Objetos.Arbol;
+
 public class GestorArboles {
 
 	private static final String HOST="localhost";
