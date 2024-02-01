@@ -11,7 +11,7 @@ public class Arbol {
 		private Habitat habitat;
 		private int altura;
 		private String origen;
-		private Date encuentra;
+		private Date encontrado;
 		private boolean singular;
 		
 	
@@ -77,13 +77,13 @@ public class Arbol {
 		}
 
 
-		public Date getEncuentra() {
-			return encuentra;
+		public Date getEncontrado() {
+			return encontrado;
 		}
 
 
-		public void setEncuentra(Date encuentra) {
-			this.encuentra = encuentra;
+		public void setEncontrado(Date encontrado) {
+			this.encontrado = encontrado;
 		}
 
 
@@ -100,7 +100,7 @@ public class Arbol {
 		@Override
 		public String toString() {
 			return id + ", nombreComun=" + nombreComun + ", nombreCientifico=" + nombreCientifico
-					+ ", habitat=" + habitat + ", altura=" + altura + ", origen=" + origen + ", encuentra=" + encuentra
+					+ ", habitat=" + habitat.getNombre() + ", altura=" + altura + ", origen=" + origen + ", encontrado=" + encontrado
 					+ ", singular=" + singular;
 		}	
 	

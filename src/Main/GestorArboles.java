@@ -9,7 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import Objetos.Arbol;
+import Objetos.*;
 
 public class GestorArboles {
 
@@ -55,57 +55,57 @@ public class GestorArboles {
 					 
 					 switch (select) {
 					 
-						 case CREATE:
-						 	a = new Arbol();
-						 	System.out.println("Inserte el nombre comun");
-							a.setNombreComun(scan.nextLine());
-							
-							System.out.println("Inserte el nombre cientifico");
-							a.setNombreCientifico(scan.nextLine());
-							
-							System.out.println("Inserte el habitat natural");
-							a.setHabitat(scan.nextLine());
-							
-							System.out.println("Inserte la altura");
-							a.setAltura(Integer.parseInt(scan.nextLine()));
-							
-							System.out.println("Inserte el origen");
-							a.setOrigen(scan.nextLine());
-							
-							insert(a);
-							break;
+//						 case CREATE:
+//						 	a = new Arbol();
+//						 	System.out.println("Inserte el nombre comun");
+//							a.setNombreComun(scan.nextLine());
+//							
+//							System.out.println("Inserte el nombre cientifico");
+//							a.setNombreCientifico(scan.nextLine());
+//							
+//							System.out.println("Inserte el habitat natural");
+//							a.setHabitat(scan.nextLine());
+//							
+//							System.out.println("Inserte la altura");
+//							a.setAltura(Integer.parseInt(scan.nextLine()));
+//							
+//							System.out.println("Inserte el origen");
+//							a.setOrigen(scan.nextLine());
+//							
+//							insert(a);
+//							break;
 							
 						 case READ:
 							 visualizar();
 							 break;
 							 
-						 case UPDATE:
-							 a=new Arbol();
-							 
-							 System.out.println("Inserte el id del arbol que quiere modificar");
-							 id=Integer.parseInt(scan.nextLine());
-							 a = arbol(id);
-							 System.out.println(a);
-							 System.out.println("---------------------");
-							 
-							 System.out.println("Inserte el nuevo nombre comun");
-							 a.setNombreComun(scan.nextLine());
-							
-							 System.out.println("Inserte el nuevo nombre cientifico");
-							 a.setNombreCientifico(scan.nextLine());
-							
-							 System.out.println("Inserte el nuevo habitat natural");
-							 a.setHabitat(scan.nextLine());
-							
-							 System.out.println("Inserte la nueva altura");
-							 a.setAltura(Integer.parseInt(scan.nextLine()));
-							
-							 System.out.println("Inserte el nuevo origen");
-							 a.setOrigen(scan.nextLine());
-							 
-							 update(a);
-							 System.out.println("Modificacion realizada");
-							 break;
+//						 case UPDATE:
+//							 a=new Arbol();
+//							 
+//							 System.out.println("Inserte el id del arbol que quiere modificar");
+//							 id=Integer.parseInt(scan.nextLine());
+//							 a = arbol(id);
+//							 System.out.println(a);
+//							 System.out.println("---------------------");
+//							 
+//							 System.out.println("Inserte el nuevo nombre comun");
+//							 a.setNombreComun(scan.nextLine());
+//							
+//							 System.out.println("Inserte el nuevo nombre cientifico");
+//							 a.setNombreCientifico(scan.nextLine());
+//							
+//							 System.out.println("Inserte el nuevo habitat natural");
+//							 a.setHabitat(scan.nextLine());
+//							
+//							 System.out.println("Inserte la nueva altura");
+//							 a.setAltura(Integer.parseInt(scan.nextLine()));
+//							
+//							 System.out.println("Inserte el nuevo origen");
+//							 a.setOrigen(scan.nextLine());
+//							 
+//							 update(a);
+//							 System.out.println("Modificacion realizada");
+//							 break;
 							 
 						 case DELETE:
 							 
@@ -137,37 +137,6 @@ public class GestorArboles {
 				e.printStackTrace();
 			}
 			
-	}
-	
-	private static  ArrayList<Arbol> arboles(){
-		//Variable ArrayList
-			ArrayList<Arbol> arboles = new ArrayList<>();
-			
-		try {
-			//Variables
-				Connection conexion = DriverManager.getConnection("jdbc:mysql://"+HOST+"/"+BBDD,USER,PASSWORD);
-				Statement st = conexion.createStatement();
-				ResultSet rs = st.executeQuery("SELECT * FROM arboles");
-			
-			//Recorrer y guardar en el arrayList
-				while(rs.next()){
-					Arbol a = new Arbol();
-					a.setId(rs.getInt("id"));
-					a.setNombreComun(rs.getString("nombre_comun"));
-					a.setNombreCientifico(rs.getString("nombre_cientifico"));
-					a.setHabitat(rs.getString("habitat"));
-					a.setAltura(rs.getInt("altura"));
-					a.setOrigen(rs.getString("origen"));
-					
-					arboles.add(a);
-				}	
-				
-		} catch (SQLException e) {
-			System.out.println("Error al cargar la tabla");
-			e.printStackTrace();
-		}
-		
-		return arboles;
 	}
 	
 	private static void menu() {
@@ -238,12 +207,12 @@ public class GestorArboles {
 	private static Arbol arbol(int id) {
 		//Variable
 			Arbol a = new Arbol();
-		
+			Habitat h = new Habitat();
 			try {
 				//Variables
 					Connection conexion = DriverManager.getConnection("jdbc:mysql://"+HOST+"/"+BBDD,USER,PASSWORD);
 					
-					String sql= "SELECT * FROM arboles WHERE id= ?";
+					String sql= "SELECT * FROM arboles a INNER JOIN habitat h on a.habitat_id=h.id WHERE a.id= ?";
 					
 					PreparedStatement pst = conexion.prepareStatement(sql);
 				//buscar id
@@ -255,9 +224,15 @@ public class GestorArboles {
 					a.setId(rs.getInt("id"));
 					a.setNombreComun(rs.getString("nombre_comun"));
 					a.setNombreCientifico(rs.getString("nombre_cientifico"));
-					a.setHabitat(rs.getString("habitat"));
+					
+					h.setId(rs.getInt("habitat_id"));
+					h.setNombre(rs.getString("nombre"));
+					a.setHabitat(h);
+					
 					a.setAltura(rs.getInt("altura"));
 					a.setOrigen(rs.getString("origen"));
+					a.setEncontrado(rs.getDate("encontrado"));
+					a.setSingular(rs.getBoolean("singular"));
 						
 			} catch (SQLException e) {
 				System.out.println("Id no encontrado");
@@ -265,6 +240,45 @@ public class GestorArboles {
 			}
 
 			return a;
+	}
+	
+	private static  ArrayList<Arbol> arboles(){
+		//Variable ArrayList
+			ArrayList<Arbol> arboles = new ArrayList<>();
+			
+		try {
+			//Variables
+				Connection conexion = DriverManager.getConnection("jdbc:mysql://"+HOST+"/"+BBDD,USER,PASSWORD);
+				Statement st = conexion.createStatement();
+				ResultSet rs = st.executeQuery("SELECT * FROM arboles a INNER JOIN habitat h on a.habitat_id=h.id");
+			
+			//Recorrer y guardar en el arrayList
+				while(rs.next()){
+					Arbol a = new Arbol();
+					Habitat h = new Habitat();
+					
+					a.setId(rs.getInt("id"));
+					a.setNombreComun(rs.getString("nombre_comun"));
+					a.setNombreCientifico(rs.getString("nombre_cientifico"));
+					
+					h.setId(rs.getInt("habitat_id"));
+					h.setNombre(rs.getString("nombre"));
+					a.setHabitat(h);
+					
+					a.setAltura(rs.getInt("altura"));
+					a.setOrigen(rs.getString("origen"));
+					a.setEncontrado(rs.getDate("encontrado"));
+					a.setSingular(rs.getBoolean("singular"));
+					
+					arboles.add(a);
+				}	
+				
+		} catch (SQLException e) {
+			System.out.println("Error al cargar la tabla");
+			e.printStackTrace();
+		}
+		
+		return arboles;
 	}
 
 	private static void update(Arbol a) {
