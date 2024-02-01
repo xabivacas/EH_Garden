@@ -50,7 +50,7 @@ public class GestorArboles {
 					Habitat h;
 					int id=0;
 					int select =0;
-					Date date = new Date(String);
+					Date date;
 					
 				//Menu
 					do {
