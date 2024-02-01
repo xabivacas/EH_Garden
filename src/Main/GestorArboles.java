@@ -14,7 +14,7 @@ import Objetos.Arbol;
 public class GestorArboles {
 
 	private static final String HOST="localhost";
-	private static final String BBDD="eh_garden";
+	private static final String BBDD="eh_garden2";
 	private static final String USER="root";
 	private static final String PASSWORD="";
 	private static final Scanner scan = new Scanner (System.in);
