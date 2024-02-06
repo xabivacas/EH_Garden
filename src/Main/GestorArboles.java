@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Date;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -73,8 +74,8 @@ public class GestorArboles {
 							System.out.println("Inserte el origen");
 							a.setOrigen(scan.nextLine());
 							
-//							System.out.println("Inserte cuando ha sido descubierto");
-//							a.setEncontrado((Date)scan.nextLine());
+							System.out.println("Inserte cuando ha sido descubierto");
+							a.setEncontrado(scan.nextLine());
 							
 							System.out.println("Es singular?(S/N)");
 								if(scan.nextLine().equalsIgnoreCase("S")) {
@@ -83,8 +84,28 @@ public class GestorArboles {
 									a.setSingular(false);
 								}
 								
-							visuHabitat();
+							ArrayList<Habitat> habitats=visuHabitat();
 							
+							for (Habitat habitat : habitats) {
+								System.out.println(habitat);
+							}
+							
+							System.out.println("Selecciona el ID del habitat");
+							int buscador=Integer.parseInt(scan.nextLine());
+							int i=0;
+							
+							while(buscador!=habitats.get(i).getId()||i<habitats.size()) {
+								
+								if(buscador==habitats.get(i).getId()) {
+									
+									Habitat habitat = new Habitat();
+									habitat.setId(habitats.get(i).getId());
+									habitat.setNombre(habitats.get(i).getNombre());
+									a.setHabitat(habitat);
+									
+								}
+							}
+								
 							insert(a);
 							break;
 							
@@ -148,6 +169,9 @@ public class GestorArboles {
 			catch (SQLException e) {
 				System.out.println("Error al conectarse a la base de datos");
 				e.printStackTrace();
+			} catch (ParseException e) {
+				System.out.println("Error en el Date");
+				e.printStackTrace();
 			}
 			
 	}
@@ -166,7 +190,7 @@ public class GestorArboles {
 			
 		try {
 			//Variables
-				String sql="INSERT INTO arboles (nombre_comun,nombre_cientifico,habitat,altura,origen) VALUES ( ?, ?, ?, ?, ?)";
+				String sql="INSERT INTO arboles (nombre_comun,nombre_cientifico,altura,origen,encontrado,singular,habitat) VALUES ( ?, ?, ?, ?, ?, ?, ?)";
 				
 				Connection conexion = DriverManager.getConnection("jdbc:mysql://"+HOST+"/"+BBDD,USER,PASSWORD);
 				PreparedStatement pst = conexion.prepareStatement(sql);
@@ -174,10 +198,11 @@ public class GestorArboles {
 			//Ejecutar Query
 				pst.setString(1, a.getNombreComun());
 				pst.setString(2, a.getNombreCientifico());
-				pst.setString(3,a.getHabitat() );
-				pst.setInt(4, a.getAltura());
-				pst.setString(5, a.getOrigen());
-			
+				pst.setInt(3, a.getAltura());
+				pst.setString(4, a.getOrigen());
+				pst.set
+				pst.setInt(7,a.getHabitat().getId());
+				
 				pst.execute();
 				
 			System.out.println("Insert completado");

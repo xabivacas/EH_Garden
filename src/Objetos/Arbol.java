@@ -1,6 +1,8 @@
 package Objetos;
 
-import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class Arbol {
@@ -14,7 +16,7 @@ public class Arbol {
 		private String origen;
 		private Date encontrado;
 		private boolean singular;
-		
+		private SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 	
 	//Getter&Setter
 		
@@ -83,8 +85,8 @@ public class Arbol {
 		}
 
 
-		public void setEncontrado(Date encontrado) {
-			this.encontrado = encontrado;
+		public void setEncontrado(String encontrado) throws ParseException {
+			this.encontrado = sdf.parse(encontrado);
 		}
 
 
@@ -101,7 +103,7 @@ public class Arbol {
 		@Override
 		public String toString() {
 			return id + ", nombreComun=" + nombreComun + ", nombreCientifico=" + nombreCientifico
-					+ ", habitat=" + habitat.getNombre() + ", altura=" + altura + ", origen=" + origen + ", encontrado=" + encontrado
+					+ ", habitat=" + habitat.getNombre() + ", altura=" + altura + ", origen=" + origen + ", encontrado=" + sdf.format(encontrado)
 					+ ", singular=" + singular;
 		}	
 	
